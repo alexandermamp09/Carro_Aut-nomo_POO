@@ -1,15 +1,40 @@
-#include "ServoDireccion.h"
+#ifndef SERVO_DIRECCION_H
+#define SERVO_DIRECCION_H
 
-ServoDireccion: :ServoDireccion(int pin) {
-    pinServo = pin;
-}
+#include <Arduino.h>
 
-void ServoDireccion: :inicializaer() {
-    miservo.attach(pinServo);
-    miservo.write(45);
-}
+class ServoDireccion {
 
-void ServoDireccion: :fijarangulo(int grados) {
-    int anguloSeguro = constrain(grados, 0, 75);
-    miservo.write(anguloSeguro);
-}
+private:
+
+    int pin;
+
+    int centro;
+
+    int anguloActual;
+
+    int anguloMin;
+
+    int anguloMax;
+
+    int pulsoMin;
+
+    int pulsoMax;
+
+    int convertirMicrosegundos(int angulo);
+
+public:
+
+    ServoDireccion(int pinServo, int centroServo = 90);
+
+    void inicializar();
+
+    void fijarAngulo(int angulo);
+
+    void centrar();
+
+    int obtenerAngulo();
+
+};
+
+#endif
