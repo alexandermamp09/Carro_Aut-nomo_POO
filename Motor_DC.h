@@ -4,16 +4,28 @@
 #include <Arduino.h>
 
 class MotorDC {
-    private:
-        int pinIN1; 
-        int pinin2,
-        int pinPWM;
-        int canalPWM; 
 
-    public: 
-    MotorDC(int in1, int in2, int pwm, int canal) {
-    void inicializar();
-    void setVelocidad(int velocidad);
-    }};
+private:
 
-    #endif
+    int pinA;
+    int pinB;
+    int canalA;
+    int canalB;
+
+    int freq;
+    int resolution;
+
+    int speedToDuty(int speed);
+
+public:
+
+    MotorDC(int pinA, int pinB);
+
+    void begin();
+
+    void setSpeed(int speed);
+
+    void stop();
+};
+
+#endif
