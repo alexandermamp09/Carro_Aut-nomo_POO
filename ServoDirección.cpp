@@ -1,40 +1,45 @@
-#ifndef SERVO_DIRECCION_H
-#define SERVO_DIRECCION_H
+#include "ServoDireccion.h"
 
-#include <Arduino.h>
+ServoDireccion::ServoDireccion(int pinServo, int centroServo)
+{
+    pin = pinServo;
+    centro = centroServo;
+    anguloActual = centro;
 
-class ServoDireccion {
+    anguloMin = 0;
+    anguloMax = 180;
 
-private:
+    pulsoMin = 500;
+    pulsoMax = 2500;
+}
 
-    int pin;
+void ServoDireccion::inicializar()
+{
+    ledcAttach(pin, 50, 16);  // ESP32 3.x CORRECTO
+    centrar();
+}
 
-    int centro;
+int ServoDireccion::convertirMicrosegundos(int angulo)
+{
+    angulo = constrain(angulo, anguloMin, anguloMax);
 
-    int anguloActual;
+    int pulso = map(angulo, anguloMin, anguloMax, pulsoMin, pulsoMax);
 
-    int anguloMin;
+    return (pulso * 65535) / 20000;
+}
 
-    int anguloMax;
+void ServoDireccion::fijarAngulo(int angulo)
+{
+    anguloActual = constrain(angulo, anguloMin, anguloMax);
+    ledcWrite(pin, convertirMicrosegundos(anguloActual));
+}
 
-    int pulsoMin;
+void ServoDireccion::centrar()
+{
+    fijarAngulo(centro);
+}
 
-    int pulsoMax;
-
-    int convertirMicrosegundos(int angulo);
-
-public:
-
-    ServoDireccion(int pinServo, int centroServo = 90);
-
-    void inicializar();
-
-    void fijarAngulo(int angulo);
-
-    void centrar();
-
-    int obtenerAngulo();
-
-};
-
-#endif
+int ServoDireccion::obtenerAngulo()
+{
+    return anguloActual;
+}
