@@ -1,17 +1,40 @@
 #ifndef SERVO_DIRECCION_H
 #define SERVO_DIRECCION_H
 
-#include <ESP32servo.h>
+#include <Arduino.h>
 
 class ServoDireccion {
-    private:
-        Servo miservo;
-        int pinServo;
 
-    public:
-        ServoDireccion(int pin) {
-        void inicializaer();
-        void fijarAngulo(int grados);
-        };
+private:
+
+    int pin;
+
+    int centro;
+
+    int anguloActual;
+
+    int anguloMin;
+
+    int anguloMax;
+
+    int pulsoMin;
+
+    int pulsoMax;
+
+    int convertirMicrosegundos(int angulo);
+
+public:
+
+    ServoDireccion(int pinServo, int centroServo = 90);
+
+    void inicializar();
+
+    void fijarAngulo(int angulo);
+
+    void centrar();
+
+    int obtenerAngulo();
+
+};
 
 #endif
