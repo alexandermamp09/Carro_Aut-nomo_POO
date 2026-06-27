@@ -1,17 +1,56 @@
-#include Motor_DC.h
+#include "MotorDC.h"
 
-MotorDC: :MotorDC(int in1, int in2, int pwm, int canal) {
-    pinIN1 = in1; pinIN2 = in2; pinPWM = pwm; canalPWM = canal;
+MotorDC::MotorDC(int pA, int pB)
+{
+    pinA = pA;
+    pinB = pB;
+
+    canalA = 0;
+    canalB = 1;
+
+    freq = 1000;
+    resolution = 8;
 }
 
-void MotorDC: :inicializar() {
-    pinMode(pinIN1, OUTPUT);
-    pinMode(pinIN2, OUTPUT);
-    pinMode(pinPWM, OUTPUT);
-    ledcSetup(canalPWM, 5000, 8); 
-    ledcAttachPin(pinPWM, canalPWM); 
+void MotorDC::begin()
+{
+    ledcSetup(canalA, freq, resolution);
+    ledcSetup(canalB, freq, resolution);
+
+    ledcAttachPin(pinA, canalA);
+    ledcAttachPin(pinB, canalB);
+
+    stop();
 }
 
-void MotorDC: :setVelocidad(int velocidad) {
-    ledcWrite(canalPWM, velocidad);
+int MotorDC::speedToDuty(int speed)
+{
+    speed = constrain(speed, -100, 100);
+
+    return map(abs(speed), 0, 100, 0, 255);
+}
+
+void MotorDC::setSpeed(int speed)
+{
+    speed = constrain(speed, -100, 100);
+
+    int duty = speedToDuty(speed);
+
+    if (speed > 0) {
+        ledcWrite(canalA, duty);
+        ledcWrite(canalB, 0);
+    }
+    else if (speed < 0) {
+        ledcWrite(canalA, 0);
+        ledcWrite(canalB, duty);
+    }
+    else {
+        stop();
+    }
+}
+
+void MotorDC::stop()
+{
+    ledcWrite(canalA, 0);
+    ledcWrite(canalB, 0);
 }
