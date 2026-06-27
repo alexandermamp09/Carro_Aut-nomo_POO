@@ -3,11 +3,11 @@
 ServoDireccion::ServoDireccion(int pinServo, int centroServo)
 {
     pin = pinServo;
-    centro = centroServo;
+    centro = 45;
     anguloActual = centro;
 
     anguloMin = 0;
-    anguloMax = 180;
+    anguloMax = 80;
 
     pulsoMin = 500;
     pulsoMax = 2500;
@@ -15,7 +15,10 @@ ServoDireccion::ServoDireccion(int pinServo, int centroServo)
 
 void ServoDireccion::inicializar()
 {
-    ledcAttach(pin, 50, 16);  // ESP32 3.x CORRECTO
+   const int canalPWM = 0;
+
+ledcSetup(canalPWM, 50, 16);
+ledcAttachPin(pin, canalPWM);
     centrar();
 }
 
@@ -30,8 +33,9 @@ int ServoDireccion::convertirMicrosegundos(int angulo)
 
 void ServoDireccion::fijarAngulo(int angulo)
 {
+    const int canalPWM = 0;
     anguloActual = constrain(angulo, anguloMin, anguloMax);
-    ledcWrite(pin, convertirMicrosegundos(anguloActual));
+    ledcWrite(canalPWM, convertirMicrosegundos(anguloActual));
 }
 
 void ServoDireccion::centrar()
