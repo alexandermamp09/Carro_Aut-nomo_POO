@@ -12,20 +12,20 @@ private:
     int centro;
 
     int anguloActual;
-
+    
     int anguloMin;
-
+      
     int anguloMax;
-
+      
     int pulsoMin;
 
     int pulsoMax;
 
-    int convertirMicrosegundos(int angulo);
+    int anguloADuty(int angulo);
 
 public:
 
-    ServoDireccion(int pinServo, int centroServo = 90);
+    ServoDireccion(int pinServo, int centroServo = 45);
 
     void inicializar();
 
@@ -37,4 +37,4 @@ public:
 
 };
 
-#endif
+#endifS
