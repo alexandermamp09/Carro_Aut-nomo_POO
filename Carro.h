@@ -1,30 +1,25 @@
-#ifndef CARRO_H 
+#ifndef CARRO_H
 #define CARRO_H
 
-#include "Motor_DC.h"
+#include <Arduino.h>
+//Llamo a las librerías para que el carro pueda existir jeje
 #include "ServoDireccion.h"
-#include "SensorToF.h"
-
+#include "ToFArray.h"
+//Falta la clase del MotorDC\\
 class Carro {
-  private:
-    MotorDC motor; 
-    ServoDireccion direccion;
-    SensorToF sensorFrente;
+ private:
 
-    int velociodadActual;
-    int anguloDireccion;
-    bool encendido;
+  ServoDireccion &direccion;
+  ToFArray &sensoresDistancia;
+  int velocidadBase; 
 
-  public:
-    Carro(int pinMotor, int pinServo, int pinToF);
+ public:
+  Carro(ServoDireccion &dir, ToFArray &xsens);
 
-    void arrancar();
-    void detener();
-    void setVelocidad(int nuevaVelocidad);
-    void girar(int grados);
+  void inicializarCarro();
+  void conducirNormal();
+  void esquivarObstaculos();
+  };
 
-    int mirarFrente();
-};
-
-#endif
+  #endif
 
